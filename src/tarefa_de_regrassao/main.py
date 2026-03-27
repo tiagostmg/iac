@@ -32,6 +32,16 @@ def fit_and_predict(model, X, y, lbd=0.0):
 
     model.plot_pred(X, y, X_pred, y_pred)
 
+def train_test_split(X, y):
+    pass
+
+def random_subsampling_validation(model, X, y, R=500):
+    for i in range(R):
+        ...
+    pass
+        
+
+
 fit_and_predict(mqo, X, y)
 fit_and_predict(mqo, X, y, 0.25)
 fit_and_predict(mqo, X, y, 0.5)

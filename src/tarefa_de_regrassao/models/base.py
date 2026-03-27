@@ -1,7 +1,10 @@
+from abc import ABC, abstractmethod
+
 from matplotlib import pyplot as plt
+import numpy as np
 
 
-class ModelBase:
+class ModelBase(ABC):
     def __init__(self):
         pass
     
@@ -16,3 +19,26 @@ class ModelBase:
         self.plot(X, y, plot=False)
         plt.plot(X_pred, y_pred, c="r")
         plt.show()
+        
+    @abstractmethod
+    def predict(self, X_pred: np.ndarray) -> np.ndarray:
+        ...
+    
+    def sse(self, X_test, y_test):
+        y_pred = self.predict(X_test)
+        return np.sum((y_test - y_pred) ** 2)
+    
+    def mse(self, X_test, y_test):
+        y_pred = self.predict(X_test)
+        return np.mean((y_test - y_pred) ** 2)
+    
+    def sst(self, y_test):
+        y_mean = self.y_mean(y_test)
+        return np.sum((y_test - y_mean) ** 2)
+    
+    def y_mean(self, y_test):
+        return np.mean(y_test)
+    
+    def r_squared(self, X_test, y_test):
+        return 1 - (self.sse(X_test,  y_test) / self.sst(y_test))
+        
