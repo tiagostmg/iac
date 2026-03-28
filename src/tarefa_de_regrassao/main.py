@@ -6,6 +6,9 @@ import numpy as np
 from models.mqo import MQO
 from models.media_y import MediaY
 
+OUTPUTS_DIR = Path(__file__).resolve().parent / "outputs"
+OUTPUTS_DIR.mkdir(exist_ok=True)
+
 def read_data():
     file_path = Path(__file__).resolve().parents[1] / "data" / "aerogerador.dat"
 
@@ -22,13 +25,26 @@ def read_data():
 
 X, y = read_data()
 
-    
+
+def save_figure(fig, filename):
+    output_path = OUTPUTS_DIR / filename
+    fig.savefig(output_path, dpi=300, bbox_inches="tight")
+    print(f"Plot salvo em: {output_path}")
+
+
 def plot(X, y, xlabel="Velocidade do vento", ylabel="Potência gerada", plot=True):
-    plt.scatter(X, y, alpha=0.3)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.grid(True, linestyle="--", alpha=0.3)
-    if plot: plt.show()
+    fig, ax = plt.subplots()
+    ax.scatter(X, y, alpha=0.3)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.grid(True, linestyle="--", alpha=0.3)
+
+    save_figure(fig, "dispersao_aerogerador.png")
+
+    if plot:
+        plt.show()
+    else:
+        plt.close(fig)
     
 plot(X, y)
 
@@ -103,12 +119,10 @@ for nome, model_factory, lbd in models:
 for nome, model_results in results_by_model.items():
     mse_summary = model_results["mse"]["summary"]
     r2_summary = model_results["r2"]["summary"]
-    mse_count = len(model_results["mse"]["values"])
-    r2_count = len(model_results["r2"]["values"])
 
     print(f"\n{nome}")
-    print(f"MSE (n={mse_count}) -> mean: {mse_summary['mean']:.6f}, std: {mse_summary['std']:.6f}, max: {mse_summary['max']:.6f}, min: {mse_summary['min']:.6f}")
-    print(f"R2  (n={r2_count}) -> mean: {r2_summary['mean']:.6f}, std: {r2_summary['std']:.6f}, max: {r2_summary['max']:.6f}, min: {r2_summary['min']:.6f}")
+    print(f"MSE -> mean: {mse_summary['mean']:.6f}, std: {mse_summary['std']:.6f}, max: {mse_summary['max']:.6f}, min: {mse_summary['min']:.6f}")
+    print(f"R2  -> mean: {r2_summary['mean']:.6f}, std: {r2_summary['std']:.6f}, max: {r2_summary['max']:.6f}, min: {r2_summary['min']:.6f}")
 
 
 def plot_summary(results, include_mean_model=True):
@@ -140,6 +154,8 @@ def plot_summary(results, include_mean_model=True):
     axes[1].tick_params(axis="x", rotation=25)
 
     plt.tight_layout()
+    filename = "resumo_modelos_com_media.png" if include_mean_model else "resumo_modelos_sem_media.png"
+    save_figure(fig, filename)
     plt.show()
 
 
