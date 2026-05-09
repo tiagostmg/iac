@@ -1,76 +1,63 @@
-import matplotlib.pyplot as plt
 import numpy as np
 
 
 class Adaline:
-    def __init__(self,X_train, y_train, learning_rate, precision, max_epochs):
+    def __init__(self, X_train, y_train, learning_rate, precision, max_epochs):
         self.d = y_train
         self.p, self.N = X_train.shape
-        self.w = np.random.random_sample((self.p+1,1))-.5
-        self.line = None
+        self.m = y_train.shape[0]
+        self.w = np.random.random_sample((self.m, self.p + 1)) - .5
         self.X_train = np.vstack((
-            -np.ones((1,self.N)), X_train
+            -np.ones((1, self.N)),
+            X_train
         ))
         self.lr = learning_rate
         self.pr = precision
         self.max_epochs = max_epochs
+        self.error_history = []
 
-
-        fig = plt.figure()
-        self.ax = fig.add_subplot(1,1,1)    
-        self.ax.scatter(X_train[0,y_train[0,:]==1],
-                           X_train[1,y_train[0,:]==1],c='pink',
-                           edgecolors='k')
-        self.ax.scatter(X_train[0,y_train[0,:]==-1],
-                           X_train[1,y_train[0,:]==-1],c='blue',
-                           edgecolors='k')
-        self.ax.set_xlim(-.5,6.5)
-        self.ax.set_ylim(-.5,6.5)
-        self.x1 = np.linspace(-1,7)
-        self.plot_2dline()
-    
+    def activation_function(self, u):
+        return np.where(u >= 0, 1., -1.)
 
     def eqm(self):
         eqm = 0
         for k in range(self.N):
-            x_k = self.X_train[:,k].reshape(self.p+1,1)
-            u_k = (self.w.T @ x_k)[0,0]
-            d_k = self.d[0,k]
-            eqm += (d_k - u_k)**2
-        return eqm/(2*self.N)
-        
+            x_k = self.X_train[:, k].reshape(self.p + 1, 1)
+            u_k = self.w @ x_k
+            d_k = self.d[:, k].reshape(self.m, 1)
+            eqm += np.sum((d_k - u_k) ** 2)
+        return eqm / (2 * self.N)
+
     def fit(self):
         epochs = 0
-        EQM1 = 1
-        EQM2 = 0
-        historico_eqm = []
-        while epochs < self.max_epochs and abs(EQM1 - EQM2)>self.pr:
-            EQM1 = self.eqm()
-            historico_eqm.append(EQM1)
-            for k in range(self.N):
-                x_k = self.X_train[:,k].reshape(self.p+1,1)
-                u_k = (self.w.T @ x_k)[0,0]
-                d_k = self.d[0,k]
-                e_k = d_k - u_k
-                self.w = self.w + self.lr * e_k * x_k
-            # plt.pause(.01)
-            self.plot_2dline()
-            EQM2 = self.eqm()
-            epochs+=1
-            self.ax.set_title(f"Época: {epochs}")
-        self.plot_2dline(c='purple',lw=4)
-        plt.figure(2)
-        plt.plot(historico_eqm)
-        plt.xlabel("Épocas")
-        plt.ylabel("EQM")
-        plt.title("Curva de aprendizado do modelo")
-        plt.show()
-    def predict(self):
-        ...
+        eqm_1 = 1
+        eqm_2 = 0
 
-    def plot_2dline(self,c = 'g', lw = 1):
-        x2 = -self.w[1,0]/self.w[2,0]*self.x1 + self.w[0,0]/self.w[2,0]
-        x2 = np.nan_to_num(x2)
-        if self.line != None:
-            self.line[0].remove()
-        self.line = self.ax.plot(self.x1,x2,c=c, lw = lw)
+        while epochs < self.max_epochs and abs(eqm_1 - eqm_2) > self.pr:
+            eqm_1 = self.eqm()
+            self.error_history.append(eqm_1)
+
+            for k in range(self.N):
+                x_k = self.X_train[:, k].reshape(self.p + 1, 1)
+                u_k = self.w @ x_k
+                d_k = self.d[:, k].reshape(self.m, 1)
+                e_k = d_k - u_k
+                self.w = self.w + self.lr * e_k @ x_k.T
+
+            eqm_2 = self.eqm()
+            epochs += 1
+
+        return self
+
+    def decision_function(self, X):
+        if X.ndim == 1:
+            X = X.reshape(-1, 1)
+
+        X_bias = np.vstack((
+            -np.ones((1, X.shape[1])),
+            X
+        ))
+        return self.w @ X_bias
+
+    def predict(self, X):
+        return self.activation_function(self.decision_function(X))
