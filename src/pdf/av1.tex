@@ -1,0 +1,247 @@
+\documentclass[journal,onecolumn]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{float} % Pacote necessário para forçar a posição com [H]
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+
+
+\begin{document}
+
+% Título do Trabalho
+\title{Relatório de Inteligência Artificial Computacional: Modelos de Regressão e Classificação}
+
+% Nome da Equipe e Instituição
+\author{Tiago Silveira Taumaturgo (2410518), 
+        Vinicius Lira Cavalcante (2314980), \\
+        William Wallace Sena Nogueira (2310284)
+\thanks{Trabalho apresentado à disciplina de Inteligência Artificial Computacional da Universidade de Fortaleza (UNIFOR). Professor: Msc. Paulo Cirillo Souza Barbosa.}}
+\markboth{UNIFOR - Centro de Ciências Tecnológicas - CCT}{}
+
+\maketitle
+
+\begin{abstract}
+Este relatório descreve a implementação e análise de modelos preditivos supervisionados divididos em duas etapas: regressão quantitativa e classificação qualitativa. Os modelos foram avaliados através de técnicas de validação cruzada e simulações de Monte Carlo para garantir a robustez dos resultados.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Inteligência Artificial, Regressão Linear, Classificação Gaussiana, MQO, Aprendizado Supervisionado.
+\end{IEEEkeywords}
+
+\section{Introdução}
+\IEEEPARstart{O}{presente} trabalho foca no desenvolvimento de sistemas baseados em aprendizagem supervisionada, utilizando a minimização de funções de custo para o ajuste de parâmetros. A primeira etapa aborda a predição da potência de um aerogerador, enquanto a segunda utiliza sinais de eletromiografia (EMG) para classificação de expressões faciais. O código-fonte completo desenvolvido neste trabalho está disponível publicamente em: \href{https://github.com/tiagostmg/iac}{https://github.com/tiagostmg/iac}.
+
+\section{Metodologia}
+% Seção com 42,5% da nota
+
+\subsection{Tarefa de Regressão}
+A variável independente consiste na velocidade do vento, enquanto a variável dependente representa a potência gerada. Foram implementados os seguintes modelos:
+\begin{itemize}
+    \item Média da variável dependente.
+    \item Mínimos Quadrados Ordinários (MQO) Tradicional.
+    \item MQO Regularizado (Tikhonov) com $\lambda \in \{0, 0.25, 0.5, 0.75, 1\}$.
+\end{itemize}
+A validação seguiu o método \textit{Random Subsampling Validation} com $R=500$ rodadas, utilizando 80\% dos dados para treinamento e 20\% para teste.
+
+\subsection{Tarefa de Classificação}
+A classificação das 5 expressões faciais utilizou os dados de dois sensores EMG (Corrugador do Supercílio e Zigomático Maior). Os modelos implementados foram:
+\begin{itemize}
+    \item \textbf{MQO Tradicional:} Adaptado para múltiplas classes através da codificação \textit{One-Hot Encoding} do vetor de rótulos. A classe predita é aquela que retorna o maior valor numérico na saída.
+    \item \textbf{Classificadores Gaussianos:} Baseiam-se no Teorema de Bayes para calcular a probabilidade a posteriori $P(C_k|x)$. Assumem que a densidade de probabilidade de cada classe segue uma distribuição Normal Multivariada. As variações implementadas diferem na forma como a matriz de covariância ($\Sigma$) é tratada:
+    \begin{itemize}
+        \item \textit{Tradicional (QDA):} Calcula uma matriz de covariância $\Sigma_k$ individual para cada classe, gerando fronteiras quadráticas.
+        \item \textit{Covariâncias Iguais / Matriz Agregada (LDA):} Assume que todas as classes compartilham a mesma dispersão, utilizando uma matriz de covariância combinada $\Sigma$. Gera fronteiras estritamente lineares.
+    \end{itemize}
+    \item \textbf{Naive Bayes:} Assume que os sensores (atributos) são estatisticamente independentes. Na prática, zera os elementos fora da diagonal principal da matriz de covariância $\Sigma_k$.
+    \item \textbf{Classificador Gaussiano Regularizado (Friedman):} Utiliza um hiperparâmetro $\lambda \in [0, 1]$ para ponderar a matriz de covariância individual ($\Sigma_k$) e a matriz agregada ($\Sigma$). O valor ideal de $\lambda$ foi encontrado utilizando \textit{K-Fold Cross Validation} ($K=10$).
+\end{itemize}
+
+A avaliação de robustez dos modelos foi realizada através de uma simulação de Monte Carlo com $R=500$ rodadas (80\% treino, 20\% teste).
+A classificação dos 5 gestos faciais utilizou os sensores Corrugador do Supercílio e Zigomático Maior. Os modelos implementados foram:
+\begin{itemize}
+    \item MQO Tradicional.
+    \item Classificadores Gaussianos (Tradicional, Covariâncias Iguais, Matriz Agregada).
+    \item Classificador de Bayes Ingênuo (Naive Bayes).
+    \item Classificador Gaussiano Regularizado (Friedman), com hiperparâmetro $\lambda$ definido via \textit{k-fold cross validation}.
+\end{itemize}
+
+\section{Resultados e Discussão}
+% Seção com 42,5% da nota
+
+\subsection{Análise Visual da Regressão}
+Conforme solicitado, a Figura 1 apresenta o gráfico de espalhamento dos dados do aerogerador.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Imagens/Tarefa de regressão/dispersao_aerogerador.png}
+    \caption{Relação entre Velocidade do Vento e Potência Gerada.}
+    \label{fig:scatter}
+\end{figure}
+
+Observa-se um padrão não linear, assemelhando-se a uma curva sigmoide. Um modelo linear captura a tendência central, mas apresenta limitações naturais nas extremidades devido à natureza dos dados.
+
+\subsection{Desempenho em Regressão}
+Os modelos foram avaliados pelas métricas MSE (Erro Quadrático Médio) e $R^{2}$ ao longo de 500 rodadas. Os resultados estatísticos estão consolidados nas Tabelas I e II.
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.3}
+\caption{MÉTRICA DE ERRO QUADRÁTICO MÉDIO (MSE) - $R=500$}
+\centering
+\begin{tabular}{lcccc}
+\hline
+\textbf{Modelos} & \textbf{Média} & \textbf{Desvio-Padrão} & \textbf{Maior Valor} & \textbf{Menor Valor} \\ \hline
+Média da Var. Dep. & 11084,99 & 645,95 & 13055,63 & 8845,41 \\
+MQO Tradicional & 781,26 & 157,26 & 1312,03 & 413,95 \\
+MQO Regularizado (0,25) & 796,54 & 171,33 & 1499,37 & 409,90 \\
+MQO Regularizado (0,50) & 798,34 & 166,73 & 1493,50 & 461,87 \\
+MQO Regularizado (0,75) & 799,14 & 165,00 & 1418,35 & 456,30 \\
+MQO Regularizado (1,00) & 787,50 & 167,11 & 1537,29 & 463,69 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.3}
+\caption{MÉTRICA DE COEFICIENTE DE DETERMINAÇÃO ($R^2$) - $R=500$}
+\centering
+\begin{tabular}{lcccc}
+\hline
+\textbf{Modelos} & \textbf{Média} & \textbf{Desvio-Padrão} & \textbf{Maior Valor} & \textbf{Menor Valor} \\ \hline
+Média da Var. Dep. & -0,0027 & 0,0041 & 0,0000 & -0,0362 \\
+MQO Tradicional & 0,9294 & 0,0130 & 0,9591 & 0,8819 \\
+MQO Regularizado (0,25) & 0,9281 & 0,0141 & 0,9624 & 0,8724 \\
+MQO Regularizado (0,50) & 0,9285 & 0,0137 & 0,9576 & 0,8794 \\
+MQO Regularizado (0,75) & 0,9281 & 0,0136 & 0,9569 & 0,8795 \\
+MQO Regularizado (1,00) & 0,9291 & 0,0137 & 0,9564 & 0,8684 \\ \hline
+\end{tabular}
+\end{table}
+
+\textbf{Análise Técnica:} Ao analisar as Tabelas I e II, percebe-se que todos os modelos baseados em MQO apresentam um desempenho estatisticamente equivalente, com $R^{2}$ médio próximo a 0,929. Essa semelhança ocorre porque o particionamento aleatório dos dados é renovado a cada rodada, gerando flutuações normais que não indicam a superioridade de um $\lambda$ específico. O alto valor de $R^{2}$ confirma que a velocidade do vento é um preditor robusto para a potência gerada.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Imagens/Tarefa de regressão/resumo_modelos_com_media.png}
+    \caption{Comparação de MSE e $R^2$ incluindo o modelo de média.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\linewidth]{Imagens/Tarefa de regressão/resumo_modelos_sem_media.png}
+    \caption{Comparação detalhada entre variações do MQO.}
+\end{figure}
+
+\subsection{Análise Visual e Desempenho em Classificação}
+
+O primeiro passo consistiu na visualização bidimensional dos dados de EMG, conforme ilustrado na Figura 4.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Imagens/Tarefa de classificação/scatter_plot_classes.png}
+    \caption{Gráfico de Espalhamento: Sensores EMG (Zigomático Maior vs. Corrugador).}
+    \label{fig:scatter_class}
+\end{figure}
+
+A Figura \ref{fig:scatter_class} revela uma forte sobreposição espacial entre as classes (alta densidade). A ausência de separabilidade linear clara entre as expressões faciais sugere, a priori, que modelos capazes de traçar fronteiras não-lineares poderiam obter melhor desempenho, embora devam ser cuidadosamente regularizados para evitar sobreajuste (\textit{overfitting}) ao ruído das áreas de intersecção.
+
+Para investigar essa dinâmica, as fronteiras de decisão de todos os classificadores foram plotadas, permitindo uma análise geométrica do comportamento de cada modelo. As Figuras 5 e 6 apresentam esses resultados.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Imagens/Tarefa de classificação/fronteira_mqo_tradicional.png}
+        \caption{MQO Tradicional (Linear).}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Imagens/Tarefa de classificação/fronteira_gaussiano_tradicional.png}
+        \caption{Gaussiano Tradicional (Quadrático).}
+    \end{minipage}
+    \vspace{0.4cm}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Imagens/Tarefa de classificação/fronteira_covariâncias_iguais.png}
+        \caption{Gaussiano: Covariâncias Iguais.}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Imagens/Tarefa de classificação/fronteira_matriz_agregada.png}
+        \caption{Gaussiano: Matriz Agregada (LDA).}
+    \end{minipage}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Imagens/Tarefa de classificação/fronteira_naive_bayes.png}
+        \caption{Naive Bayes (Fronteiras Ortogonais).}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{Imagens/Tarefa de classificação/fronteira_friedman_otimo_lambda_0.0500.png}
+        \caption{Friedman Ótimo ($\lambda=0.05$).}
+    \end{minipage}
+\end{figure}
+
+Fica evidente que o Classificador Gaussiano Tradicional (Figura 6) consegue envolver as nuvens de dados de forma extremamente flexível, enquanto os modelos de Covariâncias Iguais e Matriz Agregada (Figuras 7 e 8) limitam-se a cortes lineares. O Naive Bayes (Figura 9) gera fronteiras com aspeto de "blocos" retangulares devido à pressuposição de independência entre os sensores. 
+
+Para encontrar o balanço ideal entre flexibilidade e estabilidade, o modelo Regularizado de Friedman foi otimizado via K-Fold ($K=10$). Conforme a Figura 11, o ponto de máxima eficiência foi alcançado em $\lambda = 0.05$. O traçado suave do Friedman Ótimo pode ser observado na Figura 10.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\linewidth]{Imagens/Tarefa de classificação/kfold_lambda_friedman.png}
+    \caption{Variação da acurácia média em função de $\lambda$ no modelo de Friedman.}
+\end{figure}
+
+Com o $\lambda$ ótimo definido, procedeu-se à Simulação de Monte Carlo com 500 rodadas. Os resultados estatísticos estão consolidados na Tabela III e a distribuição das acurácias no boxplot da Figura 12.
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.3}
+\caption{RESULTADOS DA TAREFA DE CLASSIFICAÇÃO ($R=500$)}
+\centering
+\begin{tabular}{lcccc}
+\hline
+\textbf{Modelos} & \textbf{Média (\%)} & \textbf{Desvio-Padrão (\%)} & \textbf{Maior Valor (\%)} & \textbf{Menor Valor (\%)} \\ \hline
+MQO Tradicional & 72,39 & 0,66 & 74,10 & 70,33 \\
+Gaussiano Tradicional & 80,00 & 0,37 & 81,27 & 78,90 \\
+Gaussiano (Cov. Igual) & 94,85 & 0,27 & 95,56 & 93,97 \\
+Gaussiano (Agregada) & 96,27 & 0,18 & 96,73 & 95,72 \\
+Naive Bayes & 79,86 & 0,37 & 81,07 & 78,76 \\
+Friedman ($\lambda = 0.05$) & 99,74 & 0,04 & 99,89 & 99,63 \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{Imagens/Tarefa de classificação/boxplot_montecarlo.png}
+    \caption{Distribuição de Acurácias da Simulação de Monte Carlo.}
+    \label{fig:boxplot}
+\end{figure}
+
+
+\textbf{Análise Técnica:} Os dados revelam um comportamento fundamentado na teoria estatística: estimar covariâncias individuais para classes muito sobrepostas (Gaussiano Tradicional, 80,00\%) resultou em um desempenho muito inferior aos modelos de covariância compartilhada (Matriz Agregada, 96,27\%). Isso indica que o Gaussiano Tradicional sofreu grave sobreajuste à variância local. O MQO apresentou o pior desempenho (72,39\%) devido ao conhecido problema de mascaramento em classificações multiclasse projetadas linearmente. O modelo de Friedman sobressaiu-se com notáveis 99,74\% de acurácia média e desvio-padrão ínfimo (0,04\%), evidenciando que uma penalização leve ($\lambda=0.05$) combinada à matriz agregada foi suficiente para estabilizar a inversão das matrizes sem perder o poder de traçar fronteiras elípticas ideais.
+
+
+
+\section{Conclusões}
+% Seção com 10% da nota
+Os resultados demonstram que modelos de regressão linear baseados em MQO são altamente eficazes para o aerogerador, explicando mais de 92\% da variância dos dados. Devido à natureza estocástica da validação, os modelos MQO apresentaram desempenho equivalente, evidenciando que o sistema é robusto a diferentes configurações de regularização neste conjunto de dados.
+
+Na tarefa de classificação de dados de eletromiografia (EMG), a topologia densa e sobreposta das classes exigiu formulações não-lineares. Observou-se que o excesso de graus de liberdade no Classificador Gaussiano Tradicional prejudicou a generalização (80,00\%). A aplicação da regularização de Friedman demonstrou ser um mecanismo poderoso: ao mesclar 5\% de influência da matriz agregada à covariância individual ($\lambda=0.05$), o modelo atingiu quase a perfeição preditiva (99,74\% de acurácia) com variação praticamente nula. Conclui-se que o equilíbrio cuidadoso entre viés e variância, mediado por validação cruzada rigorosa (K-Fold), é indispensável para o sucesso de modelos de Inteligência Artificial em dados biológicos estocásticos.
+
+\begin{thebibliography}{1}
+\bibitem{roteiro}
+P. C. S. Barbosa, ``Trabalho Computacional: Modelos de Regressão e Classificação,'' UNIFOR, 2026.
+\end{thebibliography}
+
+\end{document}
