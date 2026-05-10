@@ -1,0 +1,5 @@
+Modelos				Média		Desvio-Padrão	Maior Valor	Menor Valor
+-------------------------------------------------------------------------------------
+ADAptive LINear Element.      	0.9723		0.0148		1.0000		0.9375
+Perceptron de Múltiplas Camadas	0.9780		0.0138		1.0000		0.9297
+Rede RBF                      	0.2103		0.0531		0.3828		0.1250
