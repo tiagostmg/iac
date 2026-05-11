@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1778457156.88064 "av2.tex" "av2.pdf" "av2" 1778457159.72849 0
+["pdflatex"] 1778462054.11801 "av2.tex" "av2.pdf" "av2" 1778462056.90322 0
   "../redes_neurais/outputs pt1 edit sem rfb/etapa1_mlp_ajuste_intermediario_curva.png" 1778456879.39499 89316 3f8d6bbe870aa2ef7966a7c06fd11ed7 ""
   "../redes_neurais/outputs pt1 edit sem rfb/etapa1_mlp_overfitting_curva.png" 1778456960.72142 87213 2af0073fd4b92bdaf7c6fb9751f19d32 ""
   "../redes_neurais/outputs pt1 edit sem rfb/etapa1_mlp_underfitting_curva.png" 1778456831.24888 98192 56c3d729064e6374ef650055e58bba10 ""
@@ -13,6 +13,8 @@
   "../redes_neurais/outputs_pt2/etapa2_boxplot_topico7.png" 1778456585.2202 76126 f46a9e41d53fda629a29732bae11e0cd ""
   "../redes_neurais/outputs_pt2/etapa2_mlp_melhor_matriz.png" 1778456585.22244 286234 882f72eb8fb1c2fee5169542504f10df ""
   "../redes_neurais/outputs_pt2/etapa2_mlp_pior_matriz.png" 1778456585.22466 289809 aa1fe79d3565631b65b86eb4da9f1267 ""
+  "../redes_neurais/outputs_pt2/etapa2_rbf_melhor_matriz.png" 1778456585.22681 293264 db013cf728a27da61ee7f67ac2201405 ""
+  "../redes_neurais/outputs_pt2/etapa2_rbf_pior_matriz.png" 1778456585.22877 289262 304f01d4c7d0bf13c5a40266afbee01f ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1775001600 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
@@ -50,6 +52,7 @@
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
+  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb" 1248133631 32734 69e00a6b65cedb993666e42eedb3d48f ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1248133631 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1248133631 32726 0a1aea6fcd6468ee2cf64d891f5c43c8 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1248133631 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
@@ -133,9 +136,9 @@
   "/usr/share/texlive/texmf-dist/web2c/texmf.cnf" 1775001600 40900 887e0dc8cac988a9e9c574af364cf837 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1778447904.02855 4602615 ac1019cb4c4ba39710c2cf7f752b378d ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1778447447 7753793 4fef4fc427af48d3183b514e808c0e5d ""
-  "av2.aux" 1778457159.59543 3904 7a81d5c881ada1ae2af3e6f3135f84ad "pdflatex"
-  "av2.out" 1778457159.59743 1572 187a2fed06811225b2857222f0457c62 "pdflatex"
-  "av2.tex" 1778457145.56149 14084 e374f3af57e1c7898bcfdfb31bfe01c9 ""
+  "av2.aux" 1778462056.81586 4865 e466b0566afe4b03b378267d43e058fb "pdflatex"
+  "av2.out" 1778462056.81686 1572 187a2fed06811225b2857222f0457c62 "pdflatex"
+  "av2.tex" 1778462044.76496 18814 2f6faf159b1b960e9fecfcd57420de95 ""
   (generated)
   "av2.aux"
   "av2.log"
