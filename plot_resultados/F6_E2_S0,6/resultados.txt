@@ -1,0 +1,14 @@
+[HILL_CLIMBING] Salvando gráficos da 1ª rodada na pasta 'plot_resultados'...
+[HILL_CLIMBING - Função 6] Resultados após 100 rodadas:
+  -> Moda:  3.6
+  -> Média: 4.4369
+
+[LRS] Salvando gráficos da 1ª rodada na pasta 'plot_resultados'...
+[LRS - Função 6] Resultados após 100 rodadas:
+  -> Moda:  5.7
+  -> Média: 4.9981
+
+[GRS] Salvando gráficos da 1ª rodada na pasta 'plot_resultados'...
+[GRS - Função 6] Resultados após 100 rodadas:
+  -> Moda:  5.1
+  -> Média: 4.8955
