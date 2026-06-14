@@ -1,0 +1,381 @@
+\documentclass[journal,onecolumn]{IEEEtran}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{cite}
+\usepackage{float}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+
+\begin{document}
+
+\title{Relatório de Inteligência Artificial Computacional: Busca e Otimização Meta-heurística}
+
+\author{Tiago Silveira Taumaturgo (2410518),
+        Vinicius Lira Cavalcante (2314980), \\
+        William Wallace Sena Nogueira (2310284)
+\thanks{Trabalho apresentado à disciplina de Inteligência Artificial Computacional da Universidade de Fortaleza (UNIFOR). Professor: Msc. Paulo Cirillo Souza Barbosa.}}
+\markboth{UNIFOR - Centro de Ciências Tecnológicas - CCT}{}
+
+\maketitle
+
+\begin{abstract}
+Este relatório aborda a aplicação de algoritmos de busca local e heurísticas evolutivas na resolução de problemas contínuos e discretos. A primeira etapa é dedicada à otimização contínua de funções-custo clássicas por meio de abordagens de subida de encosta (Hill Climbing), busca aleatória local (LRS) e busca aleatória global (GRS). A segunda etapa foca na resolução de problemas discretos e combinatórios complexos, utilizando Têmpera Simulada (Simulated Annealing) genérica para o problema clássico das 8-Rainhas e Algoritmos Genéticos (GA) para o Caixeiro Viajante 3D (TSP) com drone baseado na base oficial de grupos. Por fim, investiga-se a otimização contínua multivariada na função Rastrigin de 50 dimensões comparando o GA não-canônico à Têmpera Simulada sob critérios de custo computacional e de armazenamento em memória. O repositório contendo todo o código-fonte desenvolvido está disponível em: \href{https://github.com/tiagostmg/iac}{https://github.com/tiagostmg/iac}.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Inteligência Artificial Computacional, Busca Local, Têmpera Simulada, Algoritmos Genéticos, Crossover SBX, Caixeiro Viajante.
+\end{IEEEkeywords}
+
+\section{Introdução}
+\IEEEPARstart{O}{s} métodos de busca e otimização meta-heurísticos constituem uma classe de algoritmos de fundamental relevância na resolução de problemas de engenharia e logística cujos espaços de estados são complexos, multimodais ou NP-difíceis. Este trabalho relata o desenvolvimento, a análise empírica e a comparação de técnicas clássicas de busca local (Hill Climbing, LRS, GRS), da Têmpera Simulada (Simulated Annealing - SA) e de variantes de Algoritmos Genéticos (GA).
+
+O documento está estruturado de modo a descrever a metodologia adotada em cada etapa e expor os resultados das simulações computacionais. O código-fonte que gerou as análises e gráficos deste relatório é implementado sem dependência de bibliotecas de otimização prontas (implementação \textit{from scratch}), priorizando os preceitos de modularidade e reprodutibilidade científica.
+
+\section{Metodologia}
+
+Esta etapa investiga o comportamento de três algoritmos clássicos de busca local em espaços contínuos bidimensionais: Subida de Encosta (\textit{Hill Climbing} - HC), Busca Aleatória Local (\textit{Local Random Search} - LRS) e Busca Aleatória Global (\textit{Global Random Search} - GRS). Os testes foram conduzidos sobre 6 funções matemáticas com características distintas de multimodalidade e restrições de domínio, conforme descritas a seguir:
+\begin{enumerate}
+    \item \textbf{Função 1 (Esférica - Minimização)}: $f_1(x) = x_1^2 + x_2^2$, com $x_i \in [-100{,}0, 100{,}0]$. Possui um único mínimo global em $x = (0,0)$ com $f_1(x) = 0$.
+    \item \textbf{Função 2 (Exponencial - Maximização)}: $f_2(x) = \exp(-(x_1^2 + x_2^2)) + 2\exp(-((x_1-1{,}7)^2 + (x_2-1{,}7)^2))$, com $x_1 \in [-2{,}0, 4{,}0], x_2 \in [-2{,}0, 5{,}0]$. Apresenta um máximo local em $(0,0)$ com $f_2(0,0)=1$ e o máximo global em $(1{,}7, 1{,}7)$ com $f_2(1{,}7, 1{,}7) \approx 2$.
+    \item \textbf{Função 3 (Ackley 2D - Minimização)}: $f_3(x) = -20\exp\left(-0{,}2\sqrt{0{,}5(x_1^2+x_2^2)}\right) - \exp\left(0{,}5(\cos(2\pi x_1) + \cos(2\pi x_2))\right) + 20 + e^1$, com $x_i \in [-8{,}0, 8{,}0]$. Altamente multimodal, com mínimo global em $(0,0)$ com $f_3(x) = 0$.
+    \item \textbf{Função 4 (Rastrigin 2D - Minimização)}: $f_4(x) = (x_1^2 - 10\cos(2\pi x_1) + 10) + (x_2^2 - 10\cos(2\pi x_2) + 10)$, com $x_i \in [-5{,}12, 5{,}12]$. Apresenta diversos mínimos locais dispostos em grade regular, com mínimo global em $(0,0)$ com $f_4(x) = 0$.
+    \item \textbf{Função 5 (Exponencial Multimodal - Maximização)}: $f_5(x) = \frac{x_1\cos(x_1)}{20} + 2\exp(-x_1^2 - (x_2-1)^2) + 0{,}01 x_1 x_2$, com $x_i \in [-10{,}0, 10{,}0]$. Possui uma agulha estreita de máximo global próximo a $(0,1)$ e um máximo local secundário no platô plano.
+    \item \textbf{Função 6 (Senoidal Oscilatória - Maximização)}: $f_6(x) = x_1\sin(4\pi x_1) - x_2\sin(4\pi x_2 + \pi) + 1$, com $x_i \in [-1{,}0, 3{,}0]$.
+\end{enumerate}
+
+Os algoritmos de busca foram estruturados da seguinte forma:
+\begin{itemize}
+    \item \textbf{Hill Climbing (HC)}: Inicia em uma posição aleatória no domínio e realiza perturbações uniformes na vizinhança dentro de uma caixa definida pelo parâmetro $\epsilon$: $x_{cand} \sim U(x_{opt} - \epsilon, x_{opt} + \epsilon)$. A transição ocorre se $f(x_{cand})$ for melhor que $f(x_{opt})$.
+    \item \textbf{Local Random Search (LRS)}: A perturbação baseia-se em uma distribuição Gaussiana multidimensional adicionada ao ponto atual: $x_{cand} = x_{opt} + \eta$, onde $\eta \sim N(0, \sigma^2 I)$ e $\sigma$ representa a largura do passo.
+    \item \textbf{Global Random Search (GRS)}: Amostra candidatos de maneira uniforme em todo o domínio de busca, sem utilizar informações de localidade.
+\end{itemize}
+
+Para conter a busca dentro dos domínios válidos, aplica-se o operador de saturação (\textit{clipping}) nas bordas. O limite de iterações por execução foi fixado em 1000, e adotou-se um critério de parada antecipada caso não ocorra melhoria após 100 iterações consecutivas. Foram conduzidas 100 simulações completas para cada configuração de parâmetros de modo a extrair a Moda e a Média estatística de convergência de cada método.
+
+\subsection{Etapa 2: Problemas de Otimização Discreta e Combinatória}
+
+\subsubsection{2.1: Problema das 8-Rainhas (Têmpera Simulada)}
+O problema clássico das 8-Rainhas tem por objetivo posicionar 8 rainhas em um tabuleiro $8\times8$ de forma que nenhuma delas se ataque mutuamente. A representação do cromossomo adota um vetor $x \in \{1,\dots,8\}^8$, em que o índice representa a coluna do tabuleiro e o valor a linha correspondente daquela rainha.
+
+Para isso, implementou-se uma classe genérica \texttt{TemperaSimulada} com suporte a maximização ou minimização e perturbação flexível. A função heurística $h(x)$ calcula a quantidade total de ataques existentes no tabuleiro. A função objetivo (fitness) a ser maximizada é dada por:
+\begin{equation}
+f(x) = 28 - h(x)
+\end{equation}
+onde 28 representa a quantidade máxima possível de pares de rainhas sem ataques mútuos.
+
+A função de perturbação perturba apenas uma coluna aleatória para uma linha distinta da atual, restringindo a busca na vizinhança imediata. A temperatura decai de acordo com a regra de resfriamento geométrico:
+\begin{equation}
+T_{t+1} = \alpha \cdot T_t
+\end{equation}
+com $T_0 = 10{,}0$ e $\alpha = 0{,}95$. O algoritmo é executado de forma iterativa até que o conjunto de soluções únicas atinja todas as 92 soluções globais válidas do problema ($f(x) = 28$).
+
+\subsubsection{2.2: Problema do Caixeiro Viajante 3D (Algoritmo Genético)}
+O problema do Caixeiro Viajante (TSP) tridimensional modela a trajetória de menor distância percorrida por um drone de entrega a partir de uma origem $(0,0,0)$ visitando todos os pontos e retornando à origem.
+
+A modelagem utilizou a base de dados oficial contida no arquivo \texttt{CaixeiroGruposGA.csv}. Para a simulação, selecionou-se os pontos da primeira região (Grupo ID = 1), totalizando $N_{pontos} = 40$ pontos de entrega mais o ponto de partida (origem), o que preenche o requisito de tamanho de problema de $30 < N_{pontos} < 60$.
+
+A população foi fixada em $N_{pop} = 100$ indivíduos e a execução máxima em $500$ gerações. O operador de seleção adota o método do Torneio com $k=3$. Para a etapa de recombinação (crossover), devido ao caráter combinatório da cadeia de cidades (sem repetição de vértices), utilizou-se o \textit{Order Crossover} (OX1) de dois pontos de corte aleatórios. A mutação ocorre por troca (\textit{Swap}) de posição entre dois genes selecionados com taxa de $1\%$. A condição de parada antecipada (\textit{early stopping}) foi parametrizada para 50 gerações consecutivas sem melhoria no custo global. Realizou-se $R=30$ simulações de Monte Carlo avaliando o comportamento do algoritmo sob duas condições de elitismo:
+\begin{itemize}
+    \item \textbf{Com Elitismo}: Preservação de $N_e = 5$ melhores indivíduos.
+    \item \textbf{Sem Elitismo}: Recombinação global livre de herança direta.
+\end{itemize}
+
+\subsubsection{2.3: Comparação de Métodos para Otimização da Função Rastrigin ($n=50$)}
+A função de Rastrigin contínua é altamente multimodal e definida em $n$ dimensões por:
+\begin{equation}
+f(x) = 10n + \sum_{i=1}^{n} \left( x_i^2 - 10\cos(2\pi x_i) \right)
+\end{equation}
+Para $n=50$ no domínio $x_i \in [-5{,}12, 5{,}12]$, a busca pelo mínimo global em $x = (0,\dots,0)$ com $f(x)=0$ representa um alto desafio devido aos múltiplos mínimos locais.
+
+Avaliou-se um Algoritmo Genético Não-Canônico com crossover real do tipo \textit{Simulated Binary Crossover} (SBX) com $\eta = 1{,}0$ e taxa de cruzamento de 90\%, e mutação Gaussiana contínua (desvio padrão $\sigma = 0{,}5$ e taxa de mutação de $2\%$). O impacto da população foi verificado sob os tamanhos $20, 50, 100$ e $150$ com limite de $300$ gerações.
+
+Os resultados do GA foram comparados com a Têmpera Simulada contínua, usando a mesma classe genérica, temperatura inicial $T_0=50{,}0$, taxa de decaimento $\alpha=0{,}9998$, perturbação por ruído gaussiano ($\sigma=0{,}05$) e limite de $30.000$ iterações (o que equivale ao mesmo número de avaliações da função objetivo feitas pelo GA com população $100$ ao longo de $300$ gerações).
+
+\section{Resultados e Discussão}
+
+\subsection{Etapa 1: Resultados das Funções de Custo Contínuas}
+A Tabela I e a Tabela II consolidam os resultados estatísticos obtidos após 100 rodadas de Monte Carlo para os algoritmos Hill Climbing (HC), Local Random Search (LRS) e Global Random Search (GRS) sob diferentes configurações de perturbação ($\epsilon$ para HC e $\sigma$ para LRS).
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.2}
+\caption{COMPARAÇÃO DE CONVERGÊNCIA (FUNÇÕES 1, 2 E 3) EM 100 RODADAS}
+\centering
+\begin{tabular}{llcccccc}
+\toprule
+\textbf{Função} & \textbf{Configuração} & \multicolumn{2}{c}{\textbf{Hill Climbing}} & \multicolumn{2}{c}{\textbf{LRS}} & \multicolumn{2}{c}{\textbf{GRS}} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8}
+& & \textbf{Moda} & \textbf{Média} & \textbf{Moda} & \textbf{Média} & \textbf{Moda} & \textbf{Média} \\
+\midrule
+\textbf{Função 1} & $\epsilon=0{,}1$, $\sigma=0{,}5$ & $13999{,}2$ & $13843{,}0445$ & $0{,}0004$ & $0{,}0034$ & $125{,}4731$ & $75{,}8083$ \\
+(Minimização) & $\epsilon=0{,}25$, $\sigma=0{,}5$ & $6311{,}4$ & $6779{,}9388$ & $0{,}0002$ & $0{,}0028$ & $1{,}0113$ & $63{,}2279$ \\
+& $\epsilon=2{,}0$, $\sigma=0{,}5$ & $0{,}0$ & $0{,}0286$ & $0{,}0$ & $0{,}0030$ & $16{,}0831$ & $71{,}2239$ \\
+\midrule
+\textbf{Função 2} & $\epsilon=0{,}1$, $\sigma=0{,}5$ & $1{,}0$ & $1{,}0063$ & $2{,}0$ & $1{,}6789$ & $2{,}0$ & $1{,}8554$ \\
+(Maximização) & $\epsilon=0{,}25$, $\sigma=0{,}5$ & $1{,}0$ & $1{,}0059$ & $2{,}0$ & $1{,}7596$ & $2{,}0$ & $1{,}8646$ \\
+& $\epsilon=0{,}75$, $\sigma=0{,}5$ & $1{,}0$ & $1{,}0022$ & $2{,}0$ & $1{,}6190$ & $2{,}0$ & $1{,}8919$ \\
+& $\epsilon=1{,}5$, $\sigma=0{,}5$ & $2{,}0$ & $1{,}9591$ & $2{,}0$ & $1{,}8389$ & $2{,}0$ & $1{,}8637$ \\
+\midrule
+\textbf{Função 3} & $\epsilon=0{,}1$, $\sigma=0{,}5$ & $16{,}0$ & $15{,}9601$ & $0{,}1$ & $0{,}4968$ & $2{,}7$ & $2{,}9523$ \\
+(Minimização) & $\epsilon=0{,}25$, $\sigma=0{,}5$ & $16{,}0$ & $15{,}9606$ & $0{,}1$ & $0{,}5081$ & $2{,}8$ & $3{,}0230$ \\
+& $\epsilon=0{,}75$, $\sigma=0{,}5$ & $16{,}0$ & $15{,}9612$ & $0{,}1$ & $0{,}4211$ & $3{,}4$ & $2{,}9818$ \\
+& $\epsilon=1{,}0$, $\sigma=0{,}5$ & $0{,}1$ & $0{,}4443$ & $0{,}2$ & $0{,}4962$ & $2{,}7$ & $3{,}0353$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.2}
+\caption{COMPARAÇÃO DE CONVERGÊNCIA (FUNÇÕES 4, 5 E 6) EM 100 RODADAS}
+\centering
+\begin{tabular}{llcccccc}
+\toprule
+\textbf{Função} & \textbf{Configuração} & \multicolumn{2}{c}{\textbf{Hill Climbing}} & \multicolumn{2}{c}{\textbf{LRS}} & \multicolumn{2}{c}{\textbf{GRS}} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8}
+& & \textbf{Moda} & \textbf{Média} & \textbf{Moda} & \textbf{Média} & \textbf{Moda} & \textbf{Média} \\
+\midrule
+\textbf{Função 4} & $\epsilon=1{,}0$, $\sigma=0{,}5$ & $1{,}2$ & $3{,}3899$ & $2{,}2$ & $4{,}0908$ & $5{,}0$ & $4{,}3091$ \\
+\midrule
+\textbf{Função 5} & $\epsilon=0{,}1$, $\sigma=0{,}5$ & $1{,}4$ & $1{,}4370$ & $1{,}0$ & $0{,}9569$ & $1{,}4$ & $1{,}3724$ \\
+(Maximização) & $\epsilon=2{,}0$, $\sigma=0{,}5$ & $1{,}4$ & $1{,}4367$ & $0{,}5$ & $1{,}0133$ & $1{,}3$ & $1{,}4264$ \\
+& $\epsilon=5{,}0$, $\sigma=0{,}5$ & $1{,}4$ & $1{,}4353$ & $1{,}0$ & $0{,}9847$ & $1{,}4$ & $1{,}4151$ \\
+& $\epsilon=11{,}0$, $\sigma=0{,}75$ & $1{,}4$ & $1{,}4747$ & $1{,}0$ & $1{,}0001$ & $1{,}4$ & $1{,}4249$ \\
+\midrule
+\textbf{Função 6} & $\epsilon=2{,}0$, $\sigma=0{,}6$ & $3{,}6$ & $4{,}4369$ & $5{,}7$ & $4{,}9981$ & $5{,}1$ & $4{,}8955$ \\
+(Maximização) & $\epsilon=2{,}5$, $\sigma=0{,}75$ & $3{,}6$ & $4{,}5256$ & $5{,}6$ & $4{,}9069$ & $5{,}1$ & $4{,}9212$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+A análise detalhada dos resultados revela como as perturbações e as topologias influenciam o desempenho de cada método:
+
+\begin{itemize}
+    \item \textbf{Impacto da Distância de Perturbação ($\epsilon$ e $\sigma$)}:
+    \begin{itemize}
+        \item Na \textbf{Função 1} (domínio plano gigante $[-100, 100]^2$), o Hill Climbing com pequenos passos ($\epsilon=0{,}1$ e $0{,}25$) fica retido longe do mínimo global ($13999{,}2$ e $6311{,}4$, respectivamente) por limite de iterações. Ao ampliar a perturbação para $\epsilon=2{,}0$, HC alcança convergência quase perfeita ao mínimo (Moda $0{,}0$). Em contrapartida, a LRS com perturbação Gaussiana ($\sigma=0{,}5$) converge de forma robusta para próximo de zero em todas as rodadas (Moda $\le 0{,}0004$), beneficiando-se das caudas da distribuição normal que permitem saltos de magnitude variada.
+        \item Na \textbf{Função 2}, que possui um pico local de valor $1{,}0$ na origem $(0,0)$ e o ótimo global de valor $2{,}0$ em $(1{,}7, 1{,}7)$, o Hill Climbing com passos curtos ($\epsilon \le 0{,}75$) é invariavelmente capturado pelo ótimo local (Moda $1{,}0$). Apenas com $\epsilon=1{,}5$, o HC ganha energia suficiente para ultrapassar a depressão central e atingir o topo global (Moda $2{,}0$, Média $1{,}9591$). A LRS e o GRS, por realizarem amostragem estocástica de maior amplitude, localizam a região do pico global com maior facilidade (Moda $2{,}0$ para ambos).
+        \item Para as funções multimodais e complexas (\textbf{Funções 3 e 4}), perturbações curtas limitam o HC em mínimos locais distantes do centro. A elevação de $\epsilon$ para $1{,}0$ permite ao HC aproximar-se substancialmente do ótimo central da Ackley (Moda $0{,}1$ na F3) e da Rastrigin (Moda $1{,}2$ na F4).
+    \end{itemize}
+    \item \textbf{Eficiência Comparativa dos Métodos}:
+    \begin{itemize}
+        \item O \textbf{Hill Climbing} é altamente eficiente quando a perturbação $\epsilon$ está calibrada com a topologia do problema, agindo como um otimizador de descida/subida rápida.
+        \item O \textbf{LRS} mostra-se a alternativa mais equilibrada e consistente em problemas unimodais ou com bacias amplas, superando o HC em cenários onde o ajuste fixo de $\epsilon$ é inadequado.
+        \item O \textbf{GRS} possui baixa eficiência de sintonia fina, atuando como um amostrador global de baixa convergência de precisão, contudo é útil para escapar de ótimos locais amplos em funções como a F2.
+    \end{itemize}
+    \item \textbf{Impacto da Multimodalidade}:
+    \begin{itemize}
+        \item A análise empírica revela uma clara correlação inversa: quanto mais multimodal o problema (como na Rastrigin e na senoidal oscilatória F6), pior é o desempenho final médio do Hill Climbing e do LRS, os quais se encontram frequentemente presos em ótimos locais da superfície.
+        \item Particularmente na \textbf{Função 6}, a alta densidade de vales e picos faz com que seja realisticamente impossível atingir a melhor moda global utilizando apenas o algoritmo Hill Climbing convencional. Para convergir ao pico global com tal método, o ponto de partida aleatório do algoritmo precisaria coincidir com a bacia de atração do ótimo principal, o que demandaria uma sorte astronômica na inicialização stocástica, evidenciando as severas restrições dos algoritmos de busca estritamente local em superfícies altamente complexas.
+    \end{itemize}
+\end{itemize}
+
+As Figuras \ref{fig:conv_f1} e \ref{fig:superficie_f1} ilustram a convergência e a trajetória de busca dos três métodos na Função 1 com $\epsilon=2{,}0$, revelando a descida parabólica linearizada do HC, o caminho estocástico difuso do LRS e a amostragem dispersa do GRS. As Figuras \ref{fig:conv_f3} e \ref{fig:superficie_f3} exibem o mesmo comportamento para a Função 3 (Ackley) com $\epsilon=1{,}0$.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F1_E2_S0,5/aptidao_hill_climbing_f1.png}}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F1_E2_S0,5/aptidao_lrs_f1.png}}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F1_E2_S0,5/aptidao_grs_f1.png}}
+    \end{minipage}
+    \caption{Histórico de aptidão para a Função 1 (Esférica) com $\epsilon=2{,}0$ e $\sigma=0{,}5$ (HC, LRS e GRS).}
+    \label{fig:conv_f1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F1_E2_S0,5/superficie_hill_climbing_f1.png}}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F1_E2_S0,5/superficie_lrs_f1.png}}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F1_E2_S0,5/superficie_grs_f1.png}}
+    \end{minipage}
+    \caption{Trajetória tridimensional da busca local sobre a superfície da Função 1 (HC, LRS e GRS).}
+    \label{fig:superficie_f1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F3_E1_S0,5/aptidao_hill_climbing_f3.png}}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F3_E1_S0,5/aptidao_lrs_f3.png}}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F3_E1_S0,5/aptidao_grs_f3.png}}
+    \end{minipage}
+    \caption{Histórico de aptidão para a Função 3 (Ackley) com $\epsilon=1{,}0$ e $\sigma=0{,}5$ (HC, LRS e GRS).}
+    \label{fig:conv_f3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F3_E1_S0,5/superficie_hill_climbing_f3.png}}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F3_E1_S0,5/superficie_lrs_f3.png}}
+    \end{minipage}\hfill
+    \begin{minipage}{0.32\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{\detokenize{../../plot_resultados/F3_E1_S0,5/superficie_grs_f3.png}}
+    \end{minipage}
+    \caption{Trajetória tridimensional da busca local sobre a superfície da Função 3 (HC, LRS e GRS).}
+    \label{fig:superficie_f3}
+\end{figure}
+
+\subsection{Etapa 2: Resultados e Análises Meta-heurísticas}
+
+\subsubsection{2.1: Resultados para as 8-Rainhas}
+A Têmpera Simulada obteve sucesso integral na busca espacial, localizando todas as 92 soluções globais distintas possíveis. O histórico de descoberta de novas soluções ao longo das rodadas é exibido na Figura \ref{fig:queens_progress}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.62\linewidth]{\detokenize{../busca-otimizacao/outputs/8_queens_discovery_progress.png}}
+    \caption{Curva de descoberta cumulativa de soluções únicas das 8-Rainhas.}
+    \label{fig:queens_progress}
+\end{figure}
+
+O custo computacional total acumulado e a eficiência da têmpera estão descritos na Tabela I. O algoritmo consumiu em média apenas $557{,}3$ iterações por run (máximo de 1000) devido à parada antecipada no ótimo local/global. A representação física da primeira solução obtida é esboçada na Figura \ref{fig:queens_board}.
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.2}
+\caption{MÉTRICAS DO SIMULATED ANNEALING NO PROBLEMA DAS 8-RAINHAS}
+\centering
+\begin{tabular}{lc}
+\hline
+\textbf{Métrica de Desempenho} & \textbf{Valor Obtido} \\ \hline
+Tempo total de execução & $6{,}38$ s \\
+Total de rodadas executadas (Runs) & 809 \\
+Total de avaliações/iterações & 450.882 \\
+Média de iterações por rodada & $557{,}3$ \\
+Custo computacional médio por solução única & $69{,}44$ ms \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.42\linewidth]{\detokenize{../busca-otimizacao/outputs/8_queens_chessboard.png}}
+    \caption{Visualização do posicionamento das rainhas para uma das soluções obtidas.}
+    \label{fig:queens_board}
+\end{figure}
+
+\subsubsection{2.2: Resultados para o Caixeiro Viajante 3D (Drone)}
+A modelagem do GA com base de dados real revelou convergência consistente para rotas subótimas de transporte. O melhor traçado gerado pelo drone para cobrir os 40 pontos da região 1 e retornar à origem é ilustrado em 3D na Figura \ref{fig:tsp_route}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.58\linewidth]{\detokenize{../busca-otimizacao/outputs/tsp_3d_route.png}}
+    \caption{Trajetória tridimensional otimizada do drone para visitação dos pontos do Grupo 1.}
+    \label{fig:tsp_route}
+\end{figure}
+
+A análise comparativa do elitismo baseada nas 30 rodadas de Monte Carlo é apresentada na Tabela II. Ao contrário do esperado teoricamente, a ausência de elitismo permitiu maior diversidade genética na população e resultou em um custo médio final ligeiramente inferior ($554{,}70$ m contra $565{,}03$ m), assim como um menor custo absoluto obtido ($527{,}26$ m contra $529{,}33$ m). 
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.2}
+\caption{MÉTRICAS ESTATÍSTICAS COMPARATIVAS DO GA ($R=30$ RODADAS)}
+\centering
+\begin{tabular}{lcc}
+\hline
+\textbf{Métrica de Desempenho} & \textbf{Com Elitismo ($N_e=5$)} & \textbf{Sem Elitismo} \\ \hline
+Distância Média de Rota (Custo Médio) & $565{,}03$ m & $554{,}70$ m \\
+Melhor Distância Absoluta Encontrada & $529{,}33$ m & $527{,}26$ m \\
+Média de Gerações até Parada & $153{,}5$ & $141{,}9$ \\
+Moda de Gerações de Parada & 92 & 103 \\ \hline
+\end{tabular}
+\end{table}
+
+O comportamento dinâmico de convergência média do custo do melhor indivíduo ao longo das gerações pode ser observado na Figura \ref{fig:tsp_elitism}. Percebe-se que ambos os métodos estabilizam o decaimento em torno de 150 gerações, corroborado pelo histograma das gerações em que a parada antecipada ocorreu (Figura \ref{fig:tsp_hist}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.58\linewidth]{\detokenize{../busca-otimizacao/outputs/tsp_ga_elitism_comparison.png}}
+    \caption{Comparação de convergência média com e sem elitismo.}
+    \label{fig:tsp_elitism}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.58\linewidth]{\detokenize{../busca-otimizacao/outputs/tsp_ga_convergence_histogram.png}}
+    \caption{Distribuição de gerações necessárias para acionamento do critério de parada antecipada.}
+    \label{fig:tsp_hist}
+\end{figure}
+
+\subsubsection{2.3: Resultados para a Função Rastrigin}
+A análise de convergência do Algoritmo Genético Não-Canônico para diferentes populações é apresentada na Figura \ref{fig:rastrigin_ga_pop}. Os resultados médios consolidados ao longo das 5 simulações executadas constam na Tabela III.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.58\linewidth]{\detokenize{../busca-otimizacao/outputs/rastrigin_ga_pop_size_comparison.png}}
+    \caption{Histórico de convergência do GA Não-Canônico para diferentes populações (escala logarítmica).}
+    \label{fig:rastrigin_ga_pop}
+\end{figure}
+
+\begin{table}[H]
+\renewcommand{\arraystretch}{1.2}
+\caption{ANÁLISE COMPARATIVA E CUSTO COMPUTACIONAL (RASTRIGIN $n=50$)}
+\centering
+\begin{tabular}{lccc}
+\hline
+\textbf{Algoritmo} & \textbf{Custo Médio} & \textbf{Tempo Médio} & \textbf{Custo de Armazenamento} \\ \hline
+GA Não-Canônico (População = 20) & $252{,}88$ & $0{,}180$ s & $O(N_{pop} \cdot n)$ \\
+GA Não-Canônico (População = 50) & $188{,}83$ & $0{,}460$ s & $O(N_{pop} \cdot n)$ \\
+GA Não-Canônico (População = 100) & $150{,}37$ & $0{,}936$ s & $O(N_{pop} \cdot n)$ \\
+GA Não-Canônico (População = 150) & $158{,}26$ & $1{,}427$ s & $O(N_{pop} \cdot n)$ \\
+Têmpera Simulada (SA Contínua) & $204{,}91$ & $0{,}342$ s & $O(n)$ \\ \hline
+\end{tabular}
+\end{table}
+
+A análise empírica revela que aumentar o tamanho da população melhora significativamente a aptidão média até estabilizar em $N=100$. A população de 150 indivíduos exige mais tempo computacional, contudo não traz melhorias na convergência média, sugerindo que o equilíbrio ideal está no entorno de 100 indivíduos.
+
+A comparação direta de desempenho entre o GA ($N_{pop}=100$) e o Simulated Annealing está disposta no gráfico de evolução por avaliações da função objetivo (Figura \ref{fig:rastrigin_comparison}). Embora a Têmpera Simulada possua tempo de processamento inferior por rodada (apenas $0{,}342$ s comparados a $0{,}936$ s do GA), o GA Não-Canônico com SBX e mutação Gaussiana obteve um custo médio de convergência final substancialmente menor ($150{,}37$ contra $204{,}91$).
+
+O aspecto do consumo de memória constitui um ponto crucial para sistemas embarcados. Enquanto o GA exige o armazenamento de toda a população ($N_{pop} \times 50$ valores flutuantes), a Têmpera Simulada necessita guardar apenas o vetor atual, o candidato gerado e o melhor vetor da execução ($3 \times 50$ valores flutuantes), o que justifica sua aplicação em cenários com restrições severas de memória física apesar da menor robustez contra mínimos locais secundários da Rastrigin.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.58\linewidth]{\detokenize{../busca-otimizacao/outputs/rastrigin_comparison_ga_sa.png}}
+    \caption{Curva de convergência por número de avaliações: GA contra Simulated Annealing.}
+    \label{fig:rastrigin_comparison}
+\end{figure}
+
+\section{Conclusões}
+Os experimentos computacionais confirmaram a validade e a eficiência das implementações meta-heurísticas de busca local e algoritmos evolutivos na resolução dos problemas propostos. 
+
+Na resolução das 8-Rainhas, o Simulated Annealing mostrou-se extremamente rápido e dinâmico, sendo capaz de explorar eficientemente a vizinhança e descobrir todas as 92 soluções globais em pouco tempo de execução. Para a resolução do Caixeiro Viajante 3D na base real de pontos, o Algoritmo Genético encontrou rotas de entrega subótimas satisfatórias, exibindo estabilização ao redor de 150 gerações. Por fim, a otimização contínua da função Rastrigin ilustrou o contraste de desempenho e armazenamento entre Algoritmos Genéticos e busca local: o GA não-canônico provou-se mais apto a escapar de ótimos locais na superfície complexa da Rastrigin ao custo de maior pegada em memória física, consolidando as duas estratégias como complementares no escopo da Inteligência Artificial Computacional.
+
+\begin{thebibliography}{1}
+\bibitem{roteiro}
+P. C. S. Barbosa, ``Trabalho Computacional AV3: Busca e Otimização Meta-heurística,'' UNIFOR, 2026.
+\end{thebibliography}
+
+\end{document}
