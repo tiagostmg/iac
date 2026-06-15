@@ -55,7 +55,7 @@ Esta etapa investiga o comportamento de três algoritmos clássicos de busca loc
 
 Os algoritmos de busca foram estruturados da seguinte forma:
 \begin{itemize}
-    \item \textbf{Hill Climbing (HC)}: Inicia em uma posição aleatória no domínio e realiza perturbações uniformes na vizinhança dentro de uma caixa definida pelo parâmetro $\epsilon$: $x_{cand} \sim U(x_{opt} - \epsilon, x_{opt} + \epsilon)$. A transição ocorre se $f(x_{cand})$ for melhor que $f(x_{opt})$.
+    \item \textbf{Hill Climbing (HC)}: Inicia no limite inferior do domínio e realiza perturbações uniformes na vizinhança dentro de uma caixa definida pelo parâmetro $\epsilon$: $x_{cand} \sim U(x_{opt} - \epsilon, x_{opt} + \epsilon)$. A transição ocorre se $f(x_{cand})$ for melhor que $f(x_{opt})$.
     \item \textbf{Local Random Search (LRS)}: A perturbação baseia-se em uma distribuição Gaussiana multidimensional adicionada ao ponto atual: $x_{cand} = x_{opt} + \eta$, onde $\eta \sim N(0, \sigma^2 I)$ e $\sigma$ representa a largura do passo.
     \item \textbf{Global Random Search (GRS)}: Amostra candidatos de maneira uniforme em todo o domínio de busca, sem utilizar informações de localidade.
 \end{itemize}
@@ -104,11 +104,12 @@ Os resultados do GA foram comparados com a Têmpera Simulada contínua, usando a
 \section{Resultados e Discussão}
 
 \subsection{Etapa 1: Resultados das Funções de Custo Contínuas}
-A Tabela I e a Tabela II consolidam os resultados estatísticos obtidos após 100 rodadas de Monte Carlo para os algoritmos Hill Climbing (HC), Local Random Search (LRS) e Global Random Search (GRS) sob diferentes configurações de perturbação ($\epsilon$ para HC e $\sigma$ para LRS).
+A Tabela~\ref{tab:conv_f123} e a Tabela~\ref{tab:conv_f456} consolidam os resultados estatísticos obtidos após 100 rodadas de Monte Carlo para os algoritmos Hill Climbing (HC), Local Random Search (LRS) e Global Random Search (GRS) sob diferentes configurações de perturbação ($\epsilon$ para HC e $\sigma$ para LRS).
 
 \begin{table}[H]
 \renewcommand{\arraystretch}{1.2}
 \caption{COMPARAÇÃO DE CONVERGÊNCIA (FUNÇÕES 1, 2 E 3) EM 100 RODADAS}
+\label{tab:conv_f123}
 \centering
 \begin{tabular}{llcccccc}
 \toprule
@@ -136,6 +137,7 @@ A Tabela I e a Tabela II consolidam os resultados estatísticos obtidos após 10
 \begin{table}[H]
 \renewcommand{\arraystretch}{1.2}
 \caption{COMPARAÇÃO DE CONVERGÊNCIA (FUNÇÕES 4, 5 E 6) EM 100 RODADAS}
+\label{tab:conv_f456}
 \centering
 \begin{tabular}{llcccccc}
 \toprule
@@ -174,7 +176,7 @@ A análise detalhada dos resultados revela como as perturbações e as topologia
     \item \textbf{Impacto da Multimodalidade}:
     \begin{itemize}
         \item A análise empírica revela uma clara correlação inversa: quanto mais multimodal o problema (como na Rastrigin e na senoidal oscilatória F6), pior é o desempenho final médio do Hill Climbing e do LRS, os quais se encontram frequentemente presos em ótimos locais da superfície.
-        \item Particularmente na \textbf{Função 6}, a alta densidade de vales e picos faz com que seja realisticamente impossível atingir a melhor moda global utilizando apenas o algoritmo Hill Climbing convencional. Para convergir ao pico global com tal método, o ponto de partida aleatório do algoritmo precisaria coincidir com a bacia de atração do ótimo principal, o que demandaria uma sorte astronômica na inicialização stocástica, evidenciando as severas restrições dos algoritmos de busca estritamente local em superfícies altamente complexas.
+        \item Particularmente na \textbf{Função 6}, a alta densidade de vales e picos faz com que seja realisticamente impossível atingir a melhor moda global utilizando apenas o algoritmo Hill Climbing convencional. Como o ponto de partida é fixado no limite inferior do domínio, o algoritmo fica restrito à bacia de atração inicial e a perturbações locais limitadas, tornando inviável alcançar o ótimo global sob essa configuração inicial e evidenciando as severas restrições dos algoritmos de busca estritamente local sem reinicializações aleatórias em superfícies altamente complexas.
     \end{itemize}
 \end{itemize}
 
@@ -264,11 +266,12 @@ A Têmpera Simulada obteve sucesso integral na busca espacial, localizando todas
     \label{fig:queens_progress}
 \end{figure}
 
-O custo computacional total acumulado e a eficiência da têmpera estão descritos na Tabela I. O algoritmo consumiu em média apenas $557{,}3$ iterações por run (máximo de 1000) devido à parada antecipada no ótimo local/global. A representação física da primeira solução obtida é esboçada na Figura \ref{fig:queens_board}.
+O custo computacional total acumulado e a eficiência da têmpera estão descritos na Tabela~\ref{tab:metrics_queens}. O algoritmo consumiu em média apenas $557{,}3$ iterações por run (máximo de 1000) devido à parada antecipada no ótimo local/global. A representação física da primeira solução obtida é esboçada na Figura \ref{fig:queens_board}.
 
 \begin{table}[H]
 \renewcommand{\arraystretch}{1.2}
 \caption{MÉTRICAS DO SIMULATED ANNEALING NO PROBLEMA DAS 8-RAINHAS}
+\label{tab:metrics_queens}
 \centering
 \begin{tabular}{lc}
 \hline
@@ -298,11 +301,12 @@ A modelagem do GA com base de dados real revelou convergência consistente para 
     \label{fig:tsp_route}
 \end{figure}
 
-A análise comparativa do elitismo baseada nas 30 rodadas de Monte Carlo é apresentada na Tabela II. Ao contrário do esperado teoricamente, a ausência de elitismo permitiu maior diversidade genética na população e resultou em um custo médio final ligeiramente inferior ($554{,}70$ m contra $565{,}03$ m), assim como um menor custo absoluto obtido ($527{,}26$ m contra $529{,}33$ m). 
+A análise comparativa do elitismo baseada nas 30 rodadas de Monte Carlo é apresentada na Tabela~\ref{tab:metrics_tsp}. Ao contrário do esperado teoricamente, a ausência de elitismo permitiu maior diversidade genética na população e resultou em um custo médio final ligeiramente inferior ($554{,}70$ m contra $565{,}03$ m), assim como um menor custo absoluto obtido ($527{,}26$ m contra $529{,}33$ m). 
 
 \begin{table}[H]
 \renewcommand{\arraystretch}{1.2}
 \caption{MÉTRICAS ESTATÍSTICAS COMPARATIVAS DO GA ($R=30$ RODADAS)}
+\label{tab:metrics_tsp}
 \centering
 \begin{tabular}{lcc}
 \hline
@@ -331,7 +335,7 @@ O comportamento dinâmico de convergência média do custo do melhor indivíduo 
 \end{figure}
 
 \subsubsection{2.3: Resultados para a Função Rastrigin}
-A análise de convergência do Algoritmo Genético Não-Canônico para diferentes populações é apresentada na Figura \ref{fig:rastrigin_ga_pop}. Os resultados médios consolidados ao longo das 5 simulações executadas constam na Tabela III.
+A análise de convergência do Algoritmo Genético Não-Canônico para diferentes populações é apresentada na Figura \ref{fig:rastrigin_ga_pop}. Os resultados médios consolidados ao longo das 5 simulações executadas constam na Tabela~\ref{tab:metrics_rastrigin}.
 
 \begin{figure}[H]
     \centering
@@ -343,6 +347,7 @@ A análise de convergência do Algoritmo Genético Não-Canônico para diferente
 \begin{table}[H]
 \renewcommand{\arraystretch}{1.2}
 \caption{ANÁLISE COMPARATIVA E CUSTO COMPUTACIONAL (RASTRIGIN $n=50$)}
+\label{tab:metrics_rastrigin}
 \centering
 \begin{tabular}{lccc}
 \hline

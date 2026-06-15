@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2026.5.10)  14 JUN 2026 15:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2026.5.10)  14 JUN 2026 23:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -512,101 +512,101 @@ Package hyperref Warning: Token not allowed in a PDF string (Unicode):
 (hyperref)                removing `math shift' on input line 94.
 
 [2] [3]
-<../../plot_resultados/F1_E2_S0,5/aptidao_hill_climbing_f1.png, id=103, 515.285
+<../../plot_resultados/F1_E2_S0,5/aptidao_hill_climbing_f1.png, id=105, 515.285
 1pt x 340.3917pt>
 File: ../../plot_resultados/F1_E2_S0,5/aptidao_hill_climbing_f1.png Graphic fil
 e (type png)
 <use ../../plot_resultados/F1_E2_S0,5/aptidao_hill_climbing_f1.png>
 Package pdftex.def Info: ../../plot_resultados/F1_E2_S0,5/aptidao_hill_climbing
-_f1.png  used on input line 187.
+_f1.png  used on input line 189.
 (pdftex.def)             Requested size: 165.12378pt x 109.07819pt.
-<../../plot_resultados/F1_E2_S0,5/aptidao_lrs_f1.png, id=105, 508.7808pt x 340.
+<../../plot_resultados/F1_E2_S0,5/aptidao_lrs_f1.png, id=107, 508.7808pt x 340.
 3917pt>
 File: ../../plot_resultados/F1_E2_S0,5/aptidao_lrs_f1.png Graphic file (type pn
 g)
 <use ../../plot_resultados/F1_E2_S0,5/aptidao_lrs_f1.png>
 Package pdftex.def Info: ../../plot_resultados/F1_E2_S0,5/aptidao_lrs_f1.png  u
-sed on input line 191.
+sed on input line 193.
 (pdftex.def)             Requested size: 165.12378pt x 110.47536pt.
-<../../plot_resultados/F1_E2_S0,5/aptidao_grs_f1.png, id=106, 515.2851pt x 340.
+<../../plot_resultados/F1_E2_S0,5/aptidao_grs_f1.png, id=108, 515.2851pt x 340.
 3917pt>
 File: ../../plot_resultados/F1_E2_S0,5/aptidao_grs_f1.png Graphic file (type pn
 g)
 <use ../../plot_resultados/F1_E2_S0,5/aptidao_grs_f1.png>
 Package pdftex.def Info: ../../plot_resultados/F1_E2_S0,5/aptidao_grs_f1.png  u
-sed on input line 195.
+sed on input line 197.
 (pdftex.def)             Requested size: 165.12378pt x 109.07819pt.
-<../../plot_resultados/F1_E2_S0,5/superficie_hill_climbing_f1.png, id=107, 420.
+<../../plot_resultados/F1_E2_S0,5/superficie_hill_climbing_f1.png, id=109, 420.
 6114pt x 419.8887pt>
 File: ../../plot_resultados/F1_E2_S0,5/superficie_hill_climbing_f1.png Graphic 
 file (type png)
 <use ../../plot_resultados/F1_E2_S0,5/superficie_hill_climbing_f1.png>
 Package pdftex.def Info: ../../plot_resultados/F1_E2_S0,5/superficie_hill_climb
-ing_f1.png  used on input line 205.
+ing_f1.png  used on input line 207.
 (pdftex.def)             Requested size: 165.12378pt x 164.83871pt.
-<../../plot_resultados/F1_E2_S0,5/superficie_lrs_f1.png, id=108, 420.6114pt x 4
+<../../plot_resultados/F1_E2_S0,5/superficie_lrs_f1.png, id=110, 420.6114pt x 4
 19.8887pt>
 File: ../../plot_resultados/F1_E2_S0,5/superficie_lrs_f1.png Graphic file (type
  png)
 <use ../../plot_resultados/F1_E2_S0,5/superficie_lrs_f1.png>
 Package pdftex.def Info: ../../plot_resultados/F1_E2_S0,5/superficie_lrs_f1.png
-  used on input line 209.
+  used on input line 211.
 (pdftex.def)             Requested size: 165.12378pt x 164.83871pt.
-<../../plot_resultados/F1_E2_S0,5/superficie_grs_f1.png, id=109, 420.6114pt x 4
+<../../plot_resultados/F1_E2_S0,5/superficie_grs_f1.png, id=111, 420.6114pt x 4
 19.8887pt>
 File: ../../plot_resultados/F1_E2_S0,5/superficie_grs_f1.png Graphic file (type
  png)
 <use ../../plot_resultados/F1_E2_S0,5/superficie_grs_f1.png>
 Package pdftex.def Info: ../../plot_resultados/F1_E2_S0,5/superficie_grs_f1.png
-  used on input line 213.
+  used on input line 215.
 (pdftex.def)             Requested size: 165.12378pt x 164.83871pt.
-<../../plot_resultados/F3_E1_S0,5/aptidao_hill_climbing_f3.png, id=110, 496.494
+<../../plot_resultados/F3_E1_S0,5/aptidao_hill_climbing_f3.png, id=112, 496.494
 9pt x 340.3917pt>
 File: ../../plot_resultados/F3_E1_S0,5/aptidao_hill_climbing_f3.png Graphic fil
 e (type png)
 <use ../../plot_resultados/F3_E1_S0,5/aptidao_hill_climbing_f3.png>
 Package pdftex.def Info: ../../plot_resultados/F3_E1_S0,5/aptidao_hill_climbing
-_f3.png  used on input line 223.
+_f3.png  used on input line 225.
 (pdftex.def)             Requested size: 165.12378pt x 113.20738pt.
-<../../plot_resultados/F3_E1_S0,5/aptidao_lrs_f3.png, id=111, 489.9906pt x 340.
+<../../plot_resultados/F3_E1_S0,5/aptidao_lrs_f3.png, id=113, 489.9906pt x 340.
 3917pt>
 File: ../../plot_resultados/F3_E1_S0,5/aptidao_lrs_f3.png Graphic file (type pn
 g)
 <use ../../plot_resultados/F3_E1_S0,5/aptidao_lrs_f3.png>
 Package pdftex.def Info: ../../plot_resultados/F3_E1_S0,5/aptidao_lrs_f3.png  u
-sed on input line 227.
+sed on input line 229.
 (pdftex.def)             Requested size: 165.12378pt x 114.70844pt.
-<../../plot_resultados/F3_E1_S0,5/aptidao_grs_f3.png, id=112, 499.3857pt x 340.
+<../../plot_resultados/F3_E1_S0,5/aptidao_grs_f3.png, id=114, 499.3857pt x 340.
 3917pt>
 File: ../../plot_resultados/F3_E1_S0,5/aptidao_grs_f3.png Graphic file (type pn
 g)
 <use ../../plot_resultados/F3_E1_S0,5/aptidao_grs_f3.png>
 Package pdftex.def Info: ../../plot_resultados/F3_E1_S0,5/aptidao_grs_f3.png  u
-sed on input line 231.
+sed on input line 233.
 (pdftex.def)             Requested size: 165.12378pt x 112.55293pt.
-<../../plot_resultados/F3_E1_S0,5/superficie_hill_climbing_f3.png, id=113, 415.
+<../../plot_resultados/F3_E1_S0,5/superficie_hill_climbing_f3.png, id=115, 415.
 5525pt x 419.8887pt>
 File: ../../plot_resultados/F3_E1_S0,5/superficie_hill_climbing_f3.png Graphic 
 file (type png)
 <use ../../plot_resultados/F3_E1_S0,5/superficie_hill_climbing_f3.png>
 Package pdftex.def Info: ../../plot_resultados/F3_E1_S0,5/superficie_hill_climb
-ing_f3.png  used on input line 241.
+ing_f3.png  used on input line 243.
 (pdftex.def)             Requested size: 165.12378pt x 166.8441pt.
-<../../plot_resultados/F3_E1_S0,5/superficie_lrs_f3.png, id=114, 415.5525pt x 4
+<../../plot_resultados/F3_E1_S0,5/superficie_lrs_f3.png, id=116, 415.5525pt x 4
 19.8887pt>
 File: ../../plot_resultados/F3_E1_S0,5/superficie_lrs_f3.png Graphic file (type
  png)
 <use ../../plot_resultados/F3_E1_S0,5/superficie_lrs_f3.png>
 Package pdftex.def Info: ../../plot_resultados/F3_E1_S0,5/superficie_lrs_f3.png
-  used on input line 245.
+  used on input line 247.
 (pdftex.def)             Requested size: 165.12378pt x 166.8441pt.
-<../../plot_resultados/F3_E1_S0,5/superficie_grs_f3.png, id=115, 415.5525pt x 4
+<../../plot_resultados/F3_E1_S0,5/superficie_grs_f3.png, id=117, 415.5525pt x 4
 19.8887pt>
 File: ../../plot_resultados/F3_E1_S0,5/superficie_grs_f3.png Graphic file (type
  png)
 <use ../../plot_resultados/F3_E1_S0,5/superficie_grs_f3.png>
 Package pdftex.def Info: ../../plot_resultados/F3_E1_S0,5/superficie_grs_f3.png
-  used on input line 249.
+  used on input line 251.
 (pdftex.def)             Requested size: 165.12378pt x 166.8441pt.
  [4 <../../plot_resultados/F1_E2_S0,5/aptidao_hill_climbing_f1.png> <../../plot
 _resultados/F1_E2_S0,5/aptidao_lrs_f1.png> <../../plot_resultados/F1_E2_S0,5/ap
@@ -615,69 +615,69 @@ tidao_grs_f1.png> <../../plot_resultados/F1_E2_S0,5/superficie_hill_climbing_f1
 ltados/F1_E2_S0,5/superficie_grs_f1.png> <../../plot_resultados/F3_E1_S0,5/apti
 dao_hill_climbing_f3.png> <../../plot_resultados/F3_E1_S0,5/aptidao_lrs_f3.png>
  <../../plot_resultados/F3_E1_S0,5/aptidao_grs_f3.png>]
-<../busca-otimizacao/outputs/8_queens_discovery_progress.png, id=134, 611.6451p
+<../busca-otimizacao/outputs/8_queens_discovery_progress.png, id=136, 611.6451p
 t x 409.2891pt>
 File: ../busca-otimizacao/outputs/8_queens_discovery_progress.png Graphic file 
 (type png)
 <use ../busca-otimizacao/outputs/8_queens_discovery_progress.png>
 Package pdftex.def Info: ../busca-otimizacao/outputs/8_queens_discovery_progres
-s.png  used on input line 262.
+s.png  used on input line 264.
 (pdftex.def)             Requested size: 319.91748pt x 214.0806pt.
-<../busca-otimizacao/outputs/8_queens_chessboard.png, id=136, 982.1493pt x 500.
+<../busca-otimizacao/outputs/8_queens_chessboard.png, id=139, 982.1493pt x 500.
 5902pt>
 File: ../busca-otimizacao/outputs/8_queens_chessboard.png Graphic file (type pn
 g)
 <use ../busca-otimizacao/outputs/8_queens_chessboard.png>
 Package pdftex.def Info: ../busca-otimizacao/outputs/8_queens_chessboard.png  u
-sed on input line 286.
+sed on input line 289.
 (pdftex.def)             Requested size: 216.71906pt x 110.45863pt.
  [5 <../../plot_resultados/F3_E1_S0,5/superficie_hill_climbing_f3.png> <../../p
 lot_resultados/F3_E1_S0,5/superficie_lrs_f3.png> <../../plot_resultados/F3_E1_S
 0,5/superficie_grs_f3.png> <../busca-otimizacao/outputs/8_queens_discovery_prog
 ress.png>]
-<../busca-otimizacao/outputs/tsp_3d_route.png, id=149, 467.8278pt x 501.7947pt>
+<../busca-otimizacao/outputs/tsp_3d_route.png, id=152, 467.8278pt x 501.7947pt>
 
 File: ../busca-otimizacao/outputs/tsp_3d_route.png Graphic file (type png)
 <use ../busca-otimizacao/outputs/tsp_3d_route.png>
 Package pdftex.def Info: ../busca-otimizacao/outputs/tsp_3d_route.png  used on 
-input line 296.
+input line 299.
 (pdftex.def)             Requested size: 299.28094pt x 321.01735pt.
 
 [6 <../busca-otimizacao/outputs/8_queens_chessboard.png> <../busca-otimizacao/o
 utputs/tsp_3d_route.png>]
-<../busca-otimizacao/outputs/tsp_ga_elitism_comparison.png, id=161, 619.8357pt 
+<../busca-otimizacao/outputs/tsp_ga_elitism_comparison.png, id=165, 619.8357pt 
 x 407.3619pt>
 File: ../busca-otimizacao/outputs/tsp_ga_elitism_comparison.png Graphic file (t
 ype png)
 <use ../busca-otimizacao/outputs/tsp_ga_elitism_comparison.png>
 Package pdftex.def Info: ../busca-otimizacao/outputs/tsp_ga_elitism_comparison.
-png  used on input line 321.
+png  used on input line 325.
 (pdftex.def)             Requested size: 299.28094pt x 196.69383pt.
-<../busca-otimizacao/outputs/tsp_ga_convergence_histogram.png, id=162, 603.9363
+<../busca-otimizacao/outputs/tsp_ga_convergence_histogram.png, id=166, 603.9363
 pt x 407.3619pt>
 File: ../busca-otimizacao/outputs/tsp_ga_convergence_histogram.png Graphic file
  (type png)
 <use ../busca-otimizacao/outputs/tsp_ga_convergence_histogram.png>
 Package pdftex.def Info: ../busca-otimizacao/outputs/tsp_ga_convergence_histogr
-am.png  used on input line 328.
+am.png  used on input line 332.
 (pdftex.def)             Requested size: 299.28094pt x 201.87784pt.
-<../busca-otimizacao/outputs/rastrigin_ga_pop_size_comparison.png, id=164, 631.
+<../busca-otimizacao/outputs/rastrigin_ga_pop_size_comparison.png, id=169, 631.
 3989pt x 407.3619pt>
 File: ../busca-otimizacao/outputs/rastrigin_ga_pop_size_comparison.png Graphic 
 file (type png)
 <use ../busca-otimizacao/outputs/rastrigin_ga_pop_size_comparison.png>
 Package pdftex.def Info: ../busca-otimizacao/outputs/rastrigin_ga_pop_size_comp
-arison.png  used on input line 338.
+arison.png  used on input line 342.
 (pdftex.def)             Requested size: 299.28094pt x 193.09486pt.
  [7 <../busca-otimizacao/outputs/tsp_ga_elitism_comparison.png> <../busca-otimi
 zacao/outputs/tsp_ga_convergence_histogram.png>]
-<../busca-otimizacao/outputs/rastrigin_comparison_ga_sa.png, id=176, 631.158pt 
+<../busca-otimizacao/outputs/rastrigin_comparison_ga_sa.png, id=183, 631.158pt 
 x 407.8437pt>
 File: ../busca-otimizacao/outputs/rastrigin_comparison_ga_sa.png Graphic file (
 type png)
 <use ../busca-otimizacao/outputs/rastrigin_comparison_ga_sa.png>
 Package pdftex.def Info: ../busca-otimizacao/outputs/rastrigin_comparison_ga_sa
-.png  used on input line 366.
+.png  used on input line 371.
 (pdftex.def)             Requested size: 299.28094pt x 193.38548pt.
 
 [8 <../busca-otimizacao/outputs/rastrigin_ga_pop_size_comparison.png>] [9 <../b
@@ -686,10 +686,10 @@ Package rerunfilecheck Info: File `av3.out' has not changed.
 (rerunfilecheck)             Checksum: 6E6F9250C3E26DD785DA8DD8F99C2EF7;3629.
  ) 
 Here is how much of TeX's memory you used:
- 11988 strings out of 476041
- 195614 string characters out of 5793174
+ 11997 strings out of 476041
+ 195758 string characters out of 5793174
  1882388 words of memory out of 6000000
- 32198 multiletter control sequences out of 15000+600000
+ 32207 multiletter control sequences out of 15000+600000
  630795 words of font info for 150 fonts, out of 8000000 for 9000
  1137 hyphenation exceptions out of 8191
  75i,10n,76p,1052b,621s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -708,10 +708,10 @@ sr/share/texlive/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texl
 ive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/
 fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmri8a.pfb>
-Output written on av3.pdf (9 pages, 2693161 bytes).
+Output written on av3.pdf (9 pages, 2693447 bytes).
 PDF statistics:
- 274 PDF objects out of 1000 (max. 8388607)
- 191 compressed objects within 2 object streams
+ 279 PDF objects out of 1000 (max. 8388607)
+ 196 compressed objects within 2 object streams
  50 named destinations out of 1000 (max. 500000)
  208 words of extra memory for PDF output out of 10000 (max. 10000000)
 
